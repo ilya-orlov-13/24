@@ -13,36 +13,36 @@ using namespace std;
 
 // 1
 
-// Структура для хранения информации о позициях бит
+// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїРѕР·РёС†РёСЏС… Р±РёС‚
 struct HammingPositionInfo {
-    int TotalBits;          // Общее количество бит в коде Хемминга (m+r)
-    int DataBits;           // Количество информационных бит (m)
-    int ControlBits;        // Количество контрольных бит (r)
-    vector<int> ControlBitPositions; // Позиции контрольных бит
+    int TotalBits;          // РћР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р±РёС‚ РІ РєРѕРґРµ РҐРµРјРјРёРЅРіР° (m+r)
+    int DataBits;           // РљРѕР»РёС‡РµСЃС‚РІРѕ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹С… Р±РёС‚ (m)
+    int ControlBits;        // РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕРЅС‚СЂРѕР»СЊРЅС‹С… Р±РёС‚ (r)
+    vector<int> ControlBitPositions; // РџРѕР·РёС†РёРё РєРѕРЅС‚СЂРѕР»СЊРЅС‹С… Р±РёС‚
 };
 
-// Рассчитывает необходимое количество контрольных бит
+// Р Р°СЃСЃС‡РёС‚С‹РІР°РµС‚ РЅРµРѕР±С…РѕРґРёРјРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕРЅС‚СЂРѕР»СЊРЅС‹С… Р±РёС‚
 int CalculateHammingControlBits(int DataLength);
 
-// Определяет позиции контрольных бит и общую длину кода
+// РћРїСЂРµРґРµР»СЏРµС‚ РїРѕР·РёС†РёРё РєРѕРЅС‚СЂРѕР»СЊРЅС‹С… Р±РёС‚ Рё РѕР±С‰СѓСЋ РґР»РёРЅСѓ РєРѕРґР°
 HammingPositionInfo GetHammingPositionInfo(const string& Message);
 
-// Строит код Хемминга для данного сообщения
+// РЎС‚СЂРѕРёС‚ РєРѕРґ РҐРµРјРјРёРЅРіР° РґР»СЏ РґР°РЅРЅРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ
 string BuildHammingCode(const string& Message, const HammingPositionInfo& Info);
 
-// Вычисляет синдром для проверки и исправления ошибки
+// Р’С‹С‡РёСЃР»СЏРµС‚ СЃРёРЅРґСЂРѕРј РґР»СЏ РїСЂРѕРІРµСЂРєРё Рё РёСЃРїСЂР°РІР»РµРЅРёСЏ РѕС€РёР±РєРё
 int CalculateSyndrome(const string& ReceivedCode, const HammingPositionInfo& Info);
 
-// Исправляет одиночную ошибку в коде Хемминга
+// РСЃРїСЂР°РІР»СЏРµС‚ РѕРґРёРЅРѕС‡РЅСѓСЋ РѕС€РёР±РєСѓ РІ РєРѕРґРµ РҐРµРјРјРёРЅРіР°
 string CorrectHammingCode(const string& ReceivedCode, const HammingPositionInfo& Info, int ErrorPosition);
 
-// Извлекает исходное сообщение из (исправленного) кода Хемминга
+// РР·РІР»РµРєР°РµС‚ РёСЃС…РѕРґРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РёР· (РёСЃРїСЂР°РІР»РµРЅРЅРѕРіРѕ) РєРѕРґР° РҐРµРјРјРёРЅРіР°
 string ExtractMessageFromHamming(const string& CorrectedCode, const HammingPositionInfo& Info);
 
 
 // 2
 
-// Узел для дерева Хаффмана
+// РЈР·РµР» РґР»СЏ РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР°
 struct HuffmanNode {
     char Data;
     unsigned Freq;
@@ -51,36 +51,36 @@ struct HuffmanNode {
     HuffmanNode(char Data, unsigned Freq) : Data(Data), Freq(Freq), Left(nullptr), Right(nullptr) {}
 };
 
-// Сравнение для priority_queue (min-heap)
+// РЎСЂР°РІРЅРµРЅРёРµ РґР»СЏ priority_queue (min-heap)
 struct CompareHuffmanNodes {
     bool operator()(HuffmanNode* L, HuffmanNode* R) {
         return L->Freq > R->Freq;
     }
 };
 
-// Основная функция для построения дерева Хаффмана и получения кодов
+// РћСЃРЅРѕРІРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР° Рё РїРѕР»СѓС‡РµРЅРёСЏ РєРѕРґРѕРІ
 map<char, string> BuildHuffmanCodes(const string& Text, HuffmanNode*& Root);
 
-// Вспомогательная функция для рекурсивного получения кодов из дерева
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ СЂРµРєСѓСЂСЃРёРІРЅРѕРіРѕ РїРѕР»СѓС‡РµРЅРёСЏ РєРѕРґРѕРІ РёР· РґРµСЂРµРІР°
 void GetHuffmanCodesRecursive(HuffmanNode* Root, string Str, map<char, string>& HuffmanCodeMap);
 
-// Вспомогательная функция для вывода дерева Хаффмана
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ РІС‹РІРѕРґР° РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР°
 void PrintHuffmanTree(HuffmanNode* Root, string Indent = "", bool IsLeft = true);
 
-// Функция для кодирования текста с использованием кодов Хаффмана
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РєРѕРґРёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р° СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РєРѕРґРѕРІ РҐР°С„С„РјР°РЅР°
 string EncodeHuffman(const string& Text, const map<char, string>& HuffmanCodes);
 
-// Функция для декодирования текста с использованием дерева Хаффмана
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РґРµРєРѕРґРёСЂРѕРІР°РЅРёСЏ С‚РµРєСЃС‚Р° СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР°
 string DecodeHuffman(HuffmanNode* Root, const string& EncodedText);
 
-// Функция для удаления дерева Хаффмана
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР°
 void DeleteHuffmanTree(HuffmanNode* Node);
 
 
 // 3
 
-// Шифрование методом столбчатой транспозиции
+// РЁРёС„СЂРѕРІР°РЅРёРµ РјРµС‚РѕРґРѕРј СЃС‚РѕР»Р±С‡Р°С‚РѕР№ С‚СЂР°РЅСЃРїРѕР·РёС†РёРё
 string ColumnarTranspositionEncrypt(const string& PlainText, const string& Key);
 
-// Дешифрование методом столбчатой транспозиции
+// Р”РµС€РёС„СЂРѕРІР°РЅРёРµ РјРµС‚РѕРґРѕРј СЃС‚РѕР»Р±С‡Р°С‚РѕР№ С‚СЂР°РЅСЃРїРѕР·РёС†РёРё
 string ColumnarTranspositionDecrypt(const string& CipherText, const string& Key);
