@@ -27,7 +27,7 @@ string BuildHammingCode(const string& Message, const HammingPositionInfo& Info) 
     string hammingCode(Info.TotalBits, '0');
     int dataIdx = 0;
 
-    // Расставляем информационные биты
+    // Р Р°СЃСЃС‚Р°РІР»СЏРµРј РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Рµ Р±РёС‚С‹
     for (int i = 1; i <= Info.TotalBits; ++i) {
         bool isControlPos = false;
         for (int cp : Info.ControlBitPositions) {
@@ -44,18 +44,18 @@ string BuildHammingCode(const string& Message, const HammingPositionInfo& Info) 
         }
     }
 
-    // Рассчитываем контрольные биты
+    // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РєРѕРЅС‚СЂРѕР»СЊРЅС‹Рµ Р±РёС‚С‹
     for (int controlPos : Info.ControlBitPositions) {
         int xorSum = 0;
         for (int i = 1; i <= Info.TotalBits; ++i) {
-            // Проверяем, покрывает ли данный контрольный бит позицию i
+            // РџСЂРѕРІРµСЂСЏРµРј, РїРѕРєСЂС‹РІР°РµС‚ Р»Рё РґР°РЅРЅС‹Р№ РєРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ Р±РёС‚ РїРѕР·РёС†РёСЋ i
             if ((i & controlPos) != 0) {
                 if (hammingCode[i - 1] == '1') {
                     xorSum++;
                 }
             }
         }
-        // Устанавливаем контрольный бит (четность)
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РєРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ Р±РёС‚ (С‡РµС‚РЅРѕСЃС‚СЊ)
         hammingCode[controlPos - 1] = (xorSum % 2 == 0) ? '0' : '1';
     }
     return hammingCode;
@@ -66,13 +66,13 @@ int CalculateSyndrome(const string& ReceivedCode, const HammingPositionInfo& Inf
     for (int controlPos : Info.ControlBitPositions) {
         int xorSum = 0;
         for (int i = 1; i <= Info.TotalBits; ++i) {
-            if ((i & controlPos) != 0) { // Позиция i покрывается контрольным битом controlPos
+            if ((i & controlPos) != 0) { // РџРѕР·РёС†РёСЏ i РїРѕРєСЂС‹РІР°РµС‚СЃСЏ РєРѕРЅС‚СЂРѕР»СЊРЅС‹Рј Р±РёС‚РѕРј controlPos
                 if (ReceivedCode[i - 1] == '1') {
                     xorSum++;
                 }
             }
         }
-        if (xorSum % 2 != 0) { // Если нечетное количество единиц, этот контрольный бит "не сходится"
+        if (xorSum % 2 != 0) { // Р•СЃР»Рё РЅРµС‡РµС‚РЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РµРґРёРЅРёС†, СЌС‚РѕС‚ РєРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ Р±РёС‚ "РЅРµ СЃС…РѕРґРёС‚СЃСЏ"
             syndrome += controlPos;
         }
     }
@@ -81,7 +81,7 @@ int CalculateSyndrome(const string& ReceivedCode, const HammingPositionInfo& Inf
 
 string CorrectHammingCode(const string& ReceivedCode, const HammingPositionInfo& Info, int ErrorPosition) {
     if (ErrorPosition == 0 || ErrorPosition > Info.TotalBits) {
-        return ReceivedCode; // Нет ошибки или позиция вне диапазона
+        return ReceivedCode; // РќРµС‚ РѕС€РёР±РєРё РёР»Рё РїРѕР·РёС†РёСЏ РІРЅРµ РґРёР°РїР°Р·РѕРЅР°
     }
     string correctedCode = ReceivedCode;
     correctedCode[ErrorPosition - 1] = (correctedCode[ErrorPosition - 1] == '0') ? '1' : '0';
@@ -123,13 +123,13 @@ map<char, string> BuildHuffmanCodes(const string& Text, HuffmanNode*& Root) {
         HuffmanNode* left = pq.top(); pq.pop();
         HuffmanNode* right = pq.top(); pq.pop();
 
-        // '$' - специальный символ для внутренних узлов
+        // '$' - СЃРїРµС†РёР°Р»СЊРЅС‹Р№ СЃРёРјРІРѕР» РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРёС… СѓР·Р»РѕРІ
         HuffmanNode* top = new HuffmanNode('$', left->Freq + right->Freq);
         top->Left = left;
         top->Right = right;
         pq.push(top);
     }
-    Root = pq.top(); // Корень дерева Хаффмана
+    Root = pq.top(); // РљРѕСЂРµРЅСЊ РґРµСЂРµРІР° РҐР°С„С„РјР°РЅР°
 
     map<char, string> huffmanCodeMap;
     GetHuffmanCodesRecursive(Root, "", huffmanCodeMap);
@@ -139,7 +139,7 @@ map<char, string> BuildHuffmanCodes(const string& Text, HuffmanNode*& Root) {
 void GetHuffmanCodesRecursive(HuffmanNode* RootNode, string Str, map<char, string>& HuffmanCodeMap) {
     if (RootNode == nullptr) return;
 
-    // Если это листовой узел (содержит символ)
+    // Р•СЃР»Рё СЌС‚Рѕ Р»РёСЃС‚РѕРІРѕР№ СѓР·РµР» (СЃРѕРґРµСЂР¶РёС‚ СЃРёРјРІРѕР»)
     if (RootNode->Data != '$') {
         HuffmanCodeMap[RootNode->Data] = Str;
     }
@@ -187,10 +187,10 @@ string DecodeHuffman(HuffmanNode* RootNode, const string& EncodedText) {
             currentNode = currentNode->Right;
         }
 
-        // Если достигли листового узла
+        // Р•СЃР»Рё РґРѕСЃС‚РёРіР»Рё Р»РёСЃС‚РѕРІРѕРіРѕ СѓР·Р»Р°
         if (currentNode->Left == nullptr && currentNode->Right == nullptr) {
             decodedString += currentNode->Data;
-            currentNode = RootNode; // Возвращаемся к корню для следующего символа
+            currentNode = RootNode; // Р’РѕР·РІСЂР°С‰Р°РµРјСЃСЏ Рє РєРѕСЂРЅСЋ РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ СЃРёРјРІРѕР»Р°
         }
     }
     return decodedString;
@@ -208,8 +208,8 @@ void DeleteHuffmanTree(HuffmanNode* Node) {
 
 string ColumnarTranspositionEncrypt(const string& PlainText, const string& Key) {
     int numCols = Key.length();
-    int numRows = (PlainText.length() + numCols - 1) / numCols; // Округление вверх
-    vector<string> matrix(numRows, string(numCols, ' ')); // Заполняем пробелами на случай неполной последней строки
+    int numRows = (PlainText.length() + numCols - 1) / numCols; // РћРєСЂСѓРіР»РµРЅРёРµ РІРІРµСЂС…
+    vector<string> matrix(numRows, string(numCols, ' ')); // Р—Р°РїРѕР»РЅСЏРµРј РїСЂРѕР±РµР»Р°РјРё РЅР° СЃР»СѓС‡Р°Р№ РЅРµРїРѕР»РЅРѕР№ РїРѕСЃР»РµРґРЅРµР№ СЃС‚СЂРѕРєРё
 
     int k = 0;
     for (int i = 0; i < numRows; ++i) {
@@ -220,7 +220,7 @@ string ColumnarTranspositionEncrypt(const string& PlainText, const string& Key) 
         }
     }
 
-    // Создаем пары (символ ключа, индекс столбца) для сортировки
+    // РЎРѕР·РґР°РµРј РїР°СЂС‹ (СЃРёРјРІРѕР» РєР»СЋС‡Р°, РёРЅРґРµРєСЃ СЃС‚РѕР»Р±С†Р°) РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
     vector<pair<char, int>> sortedKey;
     for (int i = 0; i < numCols; ++i) {
         sortedKey.push_back({ Key[i], i });
@@ -248,7 +248,7 @@ string ColumnarTranspositionDecrypt(const string& CipherText, const string& Key)
     }
     sort(sortedKey.begin(), sortedKey.end());
 
-    // Восстанавливаем исходные индексы столбцов
+    // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РёСЃС…РѕРґРЅС‹Рµ РёРЅРґРµРєСЃС‹ СЃС‚РѕР»Р±С†РѕРІ
     vector<int> originalColOrder(numCols);
     for (int i = 0; i < numCols; ++i) {
         originalColOrder[sortedKey[i].second] = i;
@@ -256,11 +256,11 @@ string ColumnarTranspositionDecrypt(const string& CipherText, const string& Key)
 
 
     int k = 0;
-    for (const auto& p : sortedKey) { // Читаем столбцы в порядке отсортированного ключа
+    for (const auto& p : sortedKey) { // Р§РёС‚Р°РµРј СЃС‚РѕР»Р±С†С‹ РІ РїРѕСЂСЏРґРєРµ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ РєР»СЋС‡Р°
         int originalColIndexOfThisEncryptedColumn = p.second;
         for (int i = 0; i < numRows; ++i) {
             if (k < CipherText.length()) {
-                // Расставляем символы шифртекста в матрицу в "зашифрованном" порядке столбцов
+                // Р Р°СЃСЃС‚Р°РІР»СЏРµРј СЃРёРјРІРѕР»С‹ С€РёС„СЂС‚РµРєСЃС‚Р° РІ РјР°С‚СЂРёС†Сѓ РІ "Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРј" РїРѕСЂСЏРґРєРµ СЃС‚РѕР»Р±С†РѕРІ
                 matrix[i][originalColIndexOfThisEncryptedColumn] = CipherText[k++];
             }
         }
@@ -268,11 +268,11 @@ string ColumnarTranspositionDecrypt(const string& CipherText, const string& Key)
 
     string plainText = "";
     for (int i = 0; i < numRows; ++i) {
-        for (int j = 0; j < numCols; ++j) { // Читаем матрицу построчно
+        for (int j = 0; j < numCols; ++j) { // Р§РёС‚Р°РµРј РјР°С‚СЂРёС†Сѓ РїРѕСЃС‚СЂРѕС‡РЅРѕ
             plainText += matrix[i][j];
         }
     }
-    // Удаляем возможные лишние пробелы в конце, если они были добавлены для выравнивания
+    // РЈРґР°Р»СЏРµРј РІРѕР·РјРѕР¶РЅС‹Рµ Р»РёС€РЅРёРµ РїСЂРѕР±РµР»С‹ РІ РєРѕРЅС†Рµ, РµСЃР»Рё РѕРЅРё Р±С‹Р»Рё РґРѕР±Р°РІР»РµРЅС‹ РґР»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ
     size_t lastMeaningfulChar = plainText.find_last_not_of(' ');
     if (string::npos != lastMeaningfulChar) {
         plainText.erase(lastMeaningfulChar + 1);
